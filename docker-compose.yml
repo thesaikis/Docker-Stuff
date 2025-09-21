@@ -1,0 +1,32 @@
+x-arch-dev: &base
+  build:
+    context: .
+  ports:
+    - "2222:22"
+  stdin_open: true
+  tty: true
+  volumes:
+    - ./exercism:/root/exercism
+  environment:
+    HOST_USER: ${USER}
+  env_file:
+    - .env
+
+services:
+  dev-python:
+    <<: *base
+    build:
+      context: .
+      args:
+        LANG_PACKAGES: "python python-pip"
+    profiles:
+      - python
+  
+  dev-c:
+    <<: *base
+    build:
+      context: .
+      args:
+        LANG_PACKAGES: "gcc make gdb"
+    profiles:
+      - c
